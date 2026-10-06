@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Load the public Graph-RAG CSV artifacts into Neo4j graph.v1.
 
-The repository stores CSV source-of-truth files under graph_rag_knowledgement/.
+The repository stores CSV source-of-truth files under knowledge_graph/.
 This loader turns those CSVs into the Neo4j labels and relationships expected
 by app/graph_rag_pipeline/graph_query_layer.py.
 """
@@ -477,7 +477,7 @@ def validate_counts(session: Any, dry_run: bool) -> dict[str, Any]:
 
 def run_loader(args: argparse.Namespace) -> None:
     repo_root = Path(args.repo_root).resolve()
-    base = repo_root / "graph_rag_knowledgement"
+    base = repo_root / "knowledge_graph"
     env = {} if args.dry_run else require_env(read_env(repo_root / ".env"))
     driver = None
     try:
@@ -542,7 +542,7 @@ def _run_load_steps(session: Any, base: Path, args: argparse.Namespace) -> None:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Load Graph-RAG CSV artifacts into Neo4j graph.v1.")
-    parser.add_argument("--repo-root", default=Path.cwd(), help="Repository root containing .env and graph_rag_knowledgement/")
+    parser.add_argument("--repo-root", default=Path.cwd(), help="Repository root containing .env and knowledge_graph/")
     parser.add_argument("--batch-size", type=int, default=DEFAULT_BATCH_SIZE)
     parser.add_argument("--reset", action="store_true", help="Delete the existing graph before loading.")
     parser.add_argument("--dry-run", action="store_true", help="Print planned operations without writing to Neo4j.")

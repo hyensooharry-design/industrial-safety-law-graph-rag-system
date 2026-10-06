@@ -369,11 +369,11 @@ class EvidencePackAssembler:
                     "related_id": "",
                     "reference": {
                         "audit_report": (
-                            "graph_rag_knowledgement/neo4j_load/evidence_traversal/"
+                            "knowledge_graph/neo4j_load/evidence_traversal/"
                             "risk_assessment_notice_source_coverage_audit.txt"
                         ),
                         "audit_matches": (
-                            "graph_rag_knowledgement/neo4j_load/evidence_traversal/"
+                            "knowledge_graph/neo4j_load/evidence_traversal/"
                             "risk_assessment_notice_source_coverage_matches.csv"
                         ),
                         "source_coverage_judgment": "ONLY_INDIRECT_EVIDENCE_FOUND",
@@ -468,11 +468,11 @@ class EvidencePackAssembler:
                     "severity": "high",
                     "reference": {
                         "audit_report": (
-                            "graph_rag_knowledgement/neo4j_load/evidence_traversal/"
+                            "knowledge_graph/neo4j_load/evidence_traversal/"
                             "risk_assessment_notice_source_coverage_audit.txt"
                         ),
                         "audit_matches": (
-                            "graph_rag_knowledgement/neo4j_load/evidence_traversal/"
+                            "knowledge_graph/neo4j_load/evidence_traversal/"
                             "risk_assessment_notice_source_coverage_matches.csv"
                         ),
                     },

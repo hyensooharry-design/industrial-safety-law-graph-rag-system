@@ -1,7 +1,8 @@
 # Neo4j Graph Load
 
-This repository includes the CSV artifacts needed to recreate the `graph.v1`
-Neo4j database used by the Graph-RAG backend.
+This repository includes the CSV artifacts needed to recreate the `graph.v1` Neo4j database used by the Legal Graph-RAG backend.
+
+The source-of-truth graph artifacts are stored under `knowledge_graph/`.
 
 ## Prerequisites
 
@@ -25,10 +26,7 @@ NEO4J_DATABASE=graph.v1
 
 The backend intentionally refuses to use a different database name.
 
-## Verify The Load Plan
-
-Run a dry-run first. This does not connect to Neo4j and only verifies that the
-CSV files can be read and mapped into the expected graph structure.
+## Verify the load plan
 
 ```bash
 python scripts/load_neo4j_graph.py --dry-run
@@ -42,53 +40,39 @@ Expected high-level dry-run output includes:
 - `SourceNode RESOLVES_TO`: 8,858 rows
 - `ListItem ITEM_RESOLVES_TO`: 3,604 rows
 
-## Load Into Neo4j
-
-To load into an empty `graph.v1` database:
+## Load into Neo4j
 
 ```bash
 python scripts/load_neo4j_graph.py
 ```
 
-To clear the current `graph.v1` contents before loading:
+To clear a disposable local `graph.v1` database before loading:
 
 ```bash
 python scripts/load_neo4j_graph.py --reset
 ```
 
-Use `--reset` only for a disposable local database. It runs
-`MATCH (n) DETACH DELETE n` before loading.
+## What the loader creates
 
-## What The Loader Creates
+The loader creates constraints and indexes, then loads the manuscript's four conceptual graph components:
 
-The loader creates constraints and indexes, then loads:
+- Document Graph nodes and hierarchy
+- Annex Graph nodes and table structure
+- Reasoning Graph nodes and semantic relations
+- Provenance Layer relations: `EXTRACTED_FROM`, `RESOLVES_TO`, and `ITEM_RESOLVES_TO`
 
-- Reasoning nodes: `Rule`, `Requirement`, `Threshold`, `Exception`,
-  `TemporalRule`, `EntityType`, `ListItem`
-- Source/document nodes: `SourceNode`, `Law`, `Heading`, `Article`,
-  `Paragraph`, `Item`, `Subitem`, `Addendum`, `Annex`, `LogicalRow`,
-  `LogicalCell`, `AnnexNote`
-- Reasoning relationships: `HAS_REQUIREMENT`, `HAS_THRESHOLD`,
-  `HAS_EXCEPTION`, `HAS_TEMPORAL_CONDITION`, `RELATED_ENTITY`,
-  `HAS_LIST_ITEM`, `RELATED_RULE`, `EXTRACTED_FROM`
-- Source relationships: `RESOLVES_TO`, `CONTAINS`, `HAS_LOGICAL_ROW`,
-  `HAS_LOGICAL_CELL`, `HAS_NOTE`, `ITEM_RESOLVES_TO`
+## Run the application
 
-## Run The Backend
-
-After loading:
+Backend:
 
 ```bash
 python -m uvicorn graph_rag_pipeline.ask_adapter:app --app-dir app --host 127.0.0.1 --port 8000
 ```
 
-Then run the frontend:
+Frontend:
 
 ```bash
 cd frontend
 npm ci
 npm run dev
 ```
-
-The frontend defaults to `http://127.0.0.1:8000`. Override it with
-`VITE_API_BASE_URL` if needed.
